@@ -1,0 +1,30 @@
+{
+  "name": "club-benefits",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Scrapes public Israeli discount-club benefit pages, groups offers by merchant and ranks them by expected shekels saved.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.21"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:migrate": "tsx src/cli/db.ts migrate",
+    "db:reset": "tsx src/cli/db.ts reset",
+    "scrape": "node --use-env-proxy --import tsx src/cli/scrape.ts",
+    "best": "tsx src/cli/best.ts",
+    "trial:isracard": "node --use-env-proxy --import tsx scripts/trial-isracard.ts"
+  },
+  "dependencies": {
+    "playwright-core": "1.56.1",
+    "postgres": "3.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.2",
+    "tsx": "4.19.2",
+    "typescript": "5.6.3",
+    "vitest": "2.1.8"
+  }
+}

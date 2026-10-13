@@ -1,0 +1,13 @@
+{
+  "_note": "Assumptions, not data. Edit to match your own spending. basket = a typical spend in ₪; unitPrice = one ticket/item in ₪ (used for 1+1 and free items); wantSecond = chance the second unit was wanted anyway.",
+  "default": { "basket": 200, "unitPrice": 60, "wantSecond": 0.5 },
+  "קולנוע": { "basket": 90, "unitPrice": 45, "wantSecond": 0.8 },
+  "הופעות והצגות": { "basket": 500, "unitPrice": 250, "wantSecond": 0.8 },
+  "בילוי ופנאי למשפחה": { "basket": 300, "unitPrice": 90, "wantSecond": 0.8 },
+  "מסעדות ובתי קפה": { "basket": 200, "unitPrice": 70, "wantSecond": 0.5 },
+  "סופרמרקטים ופארם": { "basket": 300, "unitPrice": 30, "wantSecond": 0.8 },
+  "אופנה, הנעלה וספורט": { "basket": 400, "unitPrice": 150, "wantSecond": 0.3 },
+  "תכשיטים וטיפוח": { "basket": 500, "unitPrice": 200, "wantSecond": 0.3 },
+  "נופש וחו\"ל": { "basket": 1500, "unitPrice": 300, "wantSecond": 0.3 },
+  "יקבי בוטיק ישראלים": { "basket": 300, "unitPrice": 120, "wantSecond": 0.5 }
+}

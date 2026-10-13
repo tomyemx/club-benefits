@@ -1,0 +1,7 @@
+alias,canonical
+# One hop only: an alias must point at a canonical name, never at another alias.
+# Add a row only when you know two names are the same business everywhere.
+# Branch-limited listings (e.g. מקדונלדס נתב"ג) stay separate on purpose.
+סופר פארם,סופר-פארם
+super pharm,סופר-פארם
+hot cinema,קולנוע HOT CINEMA
