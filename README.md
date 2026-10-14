@@ -2,7 +2,7 @@
 
 Scrapes public Israeli discount-club benefit pages once a day, groups the offers by merchant, and ranks them by expected shekels saved, with a confidence badge.
 
-Plan and decisions: the Claude Doc "Club Benefits Aggregator: build plan" and the Trove note "Discount-club aggregator: plan and decisions". This folder is milestone M2 plus the pure parts of M3 and M4. There is no web page yet; a CLI answers "what's the best deal at merchant X".
+Plan and decisions: the Claude Doc "Club Benefits Aggregator: build plan" and the Trove note "Discount-club aggregator: plan and decisions". This folder covers milestones M2 and M4: the Amex scraper, the ranking, and a Hebrew right-to-left web page (plus the same answers from a CLI).
 
 ## Quick start
 
@@ -12,9 +12,19 @@ cp .env.example .env            # optional; these are the defaults
 npm install
 npm run db:migrate
 npm run scrape -- amex          # ~40 s: 12 pages, 3 s apart
-npm run best -- "סינמה סיטי"
+npm run build && npm start      # the page, at http://localhost:3000
+npm run best -- "סינמה סיטי"    # the same answer in the terminal
 npm test                        # needs the clubs_test database
+npm run test:e2e                # builds, then drives the page in Chromium
 ```
+
+## The page
+
+- **Search** a merchant (the box suggests every merchant with a live offer), tick your clubs, and optionally say what a point is worth to you.
+- **Each card** shows the estimate ("כ-51 ₪"), the confidence badge, the club, points or bonus requirements, how the number was reached ("שווי 60 ₪ × 0.85 סיכוי שההטבה עדיין בתוקף"), the assumption behind it, a link to the club's own page, and the date it was last seen.
+- **With no search**, "שווה לבדוק" lists the best offer of each merchant, but only among offers that state their saving outright. Estimates that rest on an assumed basket appear when you search for that merchant, not in the overview, so the overview doesn't rank our own assumptions.
+- The footer shows when each club was last checked, how many offers wait for manual review, and the disclaimer.
+- No client-side JavaScript is needed: the form is a plain GET, so every result is a shareable URL.
 
 Local databases, as used in development:
 
@@ -52,4 +62,6 @@ sudo -u postgres psql -c "CREATE ROLE clubs LOGIN PASSWORD 'clubs' SUPERUSER;" \
 
 - Amex live: 265 offers from 12 pages; 215 parsed, 50 for review (points-conversion programs, lounges, GOLD-program banners, names without a merchant). Three forced reruns changed 3, 1 and 0 offers. The first two were placeholder-to-real upgrades, which happen at most once per offer.
 - Isracard trial: day 1 failed (bot challenge did not clear in 30 s with the honest User-Agent).
-- 100 tests. The run-twice, version-bump and gone-marking checks were each broken on purpose once and caught.
+- 100 unit and DB tests, 8 end-to-end page tests. The run-twice, version-bump, gone-marking and overview-filter checks were each broken on purpose once and caught.
+
+Stack: Next.js 15.5.27 and React 19.1.9, past the December 2025 React Server Components advisory (CVE-2025-55182). Data access is plain SQL through postgres-js; Supabase and Vercel deployment are not set up yet.

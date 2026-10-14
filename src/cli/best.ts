@@ -2,7 +2,7 @@ import { parseArgs } from 'node:util';
 import { join } from 'node:path';
 import { connect } from '../db/client.js';
 import { AliasTable } from '../merchants/normalize.js';
-import { bestFor, loadBaselines } from '../rank/best.js';
+import { bestFor, describeAssumption, loadBaselines } from '../rank/best.js';
 import type { ClubId } from '../types.js';
 
 const { values, positionals } = parseArgs({
@@ -35,7 +35,7 @@ try {
       const value = s.expected == null ? 'not valued' : `~₪${s.expected.toFixed(1)}`;
       const pts = r.pointsCost ? ` · ${r.pointsCost} points` : r.pointsRequired ? ' · points required' : '';
       const bonus = r.requiresBonus ? ' · uses a bonus benefit' : '';
-      const basis = r.assumption && s.expected != null ? ` (${r.assumption})` : '';
+      const basis = r.assumption && s.expected != null ? ` (${describeAssumption(r.assumption, 'en')})` : '';
       console.log(`${i + 1}. [${r.club}] ${value}${basis} · ${s.badge}${pts}${bonus}`);
       console.log(`   ${r.name}`);
       console.log(`   ${r.url}  (last seen ${r.lastSeen.toISOString().slice(0, 10)})`);

@@ -4,7 +4,11 @@ import postgres from 'postgres';
 
 export type Sql = postgres.Sql;
 
-const MIGRATIONS_DIR = join(import.meta.dirname, '..', '..', 'migrations');
+// Resolved on use, not at import: inside the Next.js bundle import.meta.dirname
+// is undefined, and the page never runs migrations.
+function migrationsDir(): string {
+  return join(import.meta.dirname ?? join(process.cwd(), 'src', 'db'), '..', '..', 'migrations');
+}
 
 export function connect(url = process.env.DATABASE_URL ?? 'postgres://clubs:clubs@localhost:5432/clubs'): Sql {
   return postgres(url, { onnotice: () => {}, max: 4 });
@@ -15,10 +19,11 @@ export async function migrate(sql: Sql): Promise<string[]> {
   await sql`CREATE TABLE IF NOT EXISTS schema_migrations (name text PRIMARY KEY, applied_at timestamptz NOT NULL DEFAULT now())`;
   const done = new Set((await sql<{ name: string }[]>`SELECT name FROM schema_migrations`).map((r) => r.name));
   const applied: string[] = [];
-  for (const file of readdirSync(MIGRATIONS_DIR).filter((f) => f.endsWith('.sql')).sort()) {
+  const dir = migrationsDir();
+  for (const file of readdirSync(dir).filter((f) => f.endsWith('.sql')).sort()) {
     if (done.has(file)) continue;
     await sql.begin(async (tx) => {
-      await tx.unsafe(readFileSync(join(MIGRATIONS_DIR, file), 'utf8'));
+      await tx.unsafe(readFileSync(join(dir, file), 'utf8'));
       await tx`INSERT INTO schema_migrations (name) VALUES (${file})`;
     });
     applied.push(file);

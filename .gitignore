@@ -2,3 +2,6 @@ node_modules/
 .env
 # Per-machine trial record for the Isracard 7-day check.
 trial-log.jsonl
+.next/
+next-env.d.ts
+*.tsbuildinfo
